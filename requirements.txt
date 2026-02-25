@@ -1,0 +1,6 @@
+numpy
+tensorflow-datasets
+tensorflow
+pyyaml
+pypdf
+Pillow

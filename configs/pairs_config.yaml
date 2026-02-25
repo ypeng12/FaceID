@@ -1,0 +1,8 @@
+seed: 42
+pair_policy: "For each split, generate N positive pairs and N negative pairs. Positive pairs are sampled from identities with >=2 images. Negative pairs are sampled from different identities. N is 2000 for train, 500 for val, 500 for test (or maximum possible if less)."
+train_pairs: 2000
+val_pairs: 500
+test_pairs: 500
+data_dir: "data/lfw"
+manifest_path: "outputs/manifest.yaml"
+output_dir: "outputs/pairs"

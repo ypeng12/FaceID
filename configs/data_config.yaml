@@ -1,0 +1,8 @@
+seed: 42
+split_policy: "Identity split: 70% train, 15% val, 15% test. Identities are sorted alphabetically to ensure determinism."
+train_ratio: 0.7
+val_ratio: 0.15
+test_ratio: 0.15
+data_source: "tfds:lfw"
+output_dir: "data/lfw"
+manifest_path: "outputs/manifest.yaml"
