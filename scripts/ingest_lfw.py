@@ -1,7 +1,16 @@
 import argparse
 import os
+import sys
 import yaml
 import numpy as np
+
+# Python 3.12 removed distutils, but tensorflow still requires it.
+try:
+    import distutils
+except ImportError:
+    import setuptools
+    sys.modules['distutils'] = setuptools._distutils
+
 import tensorflow_datasets as tfds
 from PIL import Image
 
