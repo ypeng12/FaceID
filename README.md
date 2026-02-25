@@ -45,3 +45,4 @@ Execute the following copy-paste commands from the repository root to reproduce 
 
 ## Determinism
 The entire pipeline relies on sorting identities alphabetically to ensure a repeatable ordering. A fixed seed (`42`) is set within `data_config.yaml` and `pairs_config.yaml` which handles the shuffling of identities and the negative/positive sampling of pairs. The manifest guarantees verifiability.
+# FaceID
