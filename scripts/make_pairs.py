@@ -22,7 +22,8 @@ def get_images_per_identity(split_dir):
         identity_dir = os.path.join(split_dir, identity)
         if os.path.isdir(identity_dir):
             images = sorted(os.listdir(identity_dir))
-            images_paths = [os.path.join(identity_dir, img) for img in images if img.endswith('.jpg')]
+            # Store paths relative to project root for portability
+            images_paths = [os.path.relpath(os.path.join(identity_dir, img)) for img in images if img.endswith('.jpg')]
             if images_paths:
                 images_dict[identity] = images_paths
     return images_dict

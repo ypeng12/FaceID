@@ -49,19 +49,30 @@ def main():
 
     euc_diff = np.max(np.abs(loop_euc - vec_euc))
 
+    # Correctness assertions
+    TOLERANCE = 1e-6
+    cos_pass = cos_diff < TOLERANCE
+    euc_pass = euc_diff < TOLERANCE
+    assert cos_pass, f"Cosine correctness FAILED: max diff {cos_diff:.6e} >= {TOLERANCE}"
+    assert euc_pass, f"Euclidean correctness FAILED: max diff {euc_diff:.6e} >= {TOLERANCE}"
+
     results = []
     results.append(f"Benchmark Configuration: N={args.N}, D={args.D}\n")
     results.append("Cosine Similarity:")
     results.append(f"  Python Loop Time: {t_loop_cos:.4f} s")
     results.append(f"  NumPy Vectorized Time: {t_vec_cos:.4f} s")
     results.append(f"  Speedup: {t_loop_cos / t_vec_cos:.2f}x")
-    results.append(f"  Max Absolute Difference: {cos_diff:.6e}\n")
+    results.append(f"  Max Absolute Difference: {cos_diff:.6e}")
+    results.append(f"  Correctness Check: {'PASS' if cos_pass else 'FAIL'} (tolerance={TOLERANCE})\n")
     
     results.append("Euclidean Distance:")
     results.append(f"  Python Loop Time: {t_loop_euc:.4f} s")
     results.append(f"  NumPy Vectorized Time: {t_vec_euc:.4f} s")
     results.append(f"  Speedup: {t_loop_euc / t_vec_euc:.2f}x")
-    results.append(f"  Max Absolute Difference: {euc_diff:.6e}\n")
+    results.append(f"  Max Absolute Difference: {euc_diff:.6e}")
+    results.append(f"  Correctness Check: {'PASS' if euc_pass else 'FAIL'} (tolerance={TOLERANCE})\n")
+
+    results.append(f"Overall Correctness: {'ALL PASS' if (cos_pass and euc_pass) else 'FAIL'}\n")
     
     results_str = "\n".join(results)
     print(results_str)
