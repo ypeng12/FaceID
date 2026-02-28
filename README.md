@@ -7,6 +7,7 @@ This milestone establishes the reproducible foundations for the Face Verificatio
 - `src/`: Core Python modules (e.g., similarity metrics).
 - `scripts/`: Command-line entrypoints for dataset ingestion, pair generation, and benchmarking.
 - `configs/`: YAML configurations controlling dataset policies and seed settings.
+- `tests/`: Unit tests and determinism checks.
 - `outputs/`: Generated artifacts (manifest, pairs CSV files, benchmark results). **(Not committed)**
 - `data/`: Downloaded datasets cache. **(Not committed)**
 
@@ -45,4 +46,14 @@ Execute the following copy-paste commands from the repository root to reproduce 
 
 ## Determinism
 The entire pipeline relies on sorting identities alphabetically to ensure a repeatable ordering. A fixed seed (`42`) is set within `data_config.yaml` and `pairs_config.yaml` which handles the shuffling of identities and the negative/positive sampling of pairs. The manifest guarantees verifiability.
-# FaceID
+
+## Tests
+Run unit tests and determinism checks:
+```bash
+python -m pytest tests/ -v
+```
+Or without pytest:
+```bash
+python tests/test_similarity.py
+python tests/test_determinism.py
+```

@@ -1,6 +1,5 @@
-numpy
-tensorflow-datasets
-tensorflow
-pyyaml
-pypdf
-Pillow
+numpy==1.26.4
+tensorflow==2.16.1
+tensorflow-datasets==4.9.6
+pyyaml==6.0.2
+Pillow==11.1.0
