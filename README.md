@@ -1,4 +1,4 @@
-# MSML 605 - Milestone 1: Face Verification Foundations
+Face Verification Foundations
 
 ## Project Overview
 This milestone establishes the reproducible foundations for the Face Verification system. The goal is to build a deterministic pipeline that ingests the LFW dataset, creates train/val/test splits, generates verification pairs, and implements fast, vectorized similarity metrics for embeddings.
