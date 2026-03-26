@@ -1,0 +1,9 @@
+run_name: "Run3-Baseline-Test-Eval"
+data_version: "v1.0-baseline"
+split: "test"
+pairs_file: "outputs/pairs/test.csv"
+is_sweep: false
+threshold: 0.61 
+score_is_distance: false
+note: "Baseline evaluation on test split with chosen threshold"
+output_dir: "outputs/eval"

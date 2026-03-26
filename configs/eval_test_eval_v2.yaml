@@ -1,0 +1,9 @@
+run_name: "Run5-PostChange-Test-Eval"
+data_version: "v2.0-unique-pairs"
+split: "test"
+pairs_file: "outputs/pairs_v2/test.csv"
+is_sweep: false
+threshold: 0.59
+score_is_distance: false
+note: "Post-change evaluation on test split"
+output_dir: "outputs/eval"

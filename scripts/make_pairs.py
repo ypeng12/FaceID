@@ -28,7 +28,7 @@ def get_images_per_identity(split_dir):
                 images_dict[identity] = images_paths
     return images_dict
 
-def generate_pairs_for_split(images_dict, num_pairs, split_name):
+def generate_pairs_for_split(images_dict, num_pairs, split_name, enforce_unique=False):
     """Generate num_pairs/2 positive and num_pairs/2 negative pairs."""
     identities = sorted(list(images_dict.keys()))
     
@@ -36,15 +36,27 @@ def generate_pairs_for_split(images_dict, num_pairs, split_name):
     pos_identities = [id for id in identities if len(images_dict[id]) >= 2]
     
     pairs = []
+    used_pos = set()
+    used_neg = set()
     
     # Generate positive pairs
     n_pos = num_pairs // 2
-    for _ in range(n_pos):
+    attempts = 0
+    while len(pairs) < n_pos and attempts < n_pos * 10:
+        attempts += 1
         if not pos_identities:
             break
         identity = np.random.choice(pos_identities)
         imgs = images_dict[identity]
         idx1, idx2 = np.random.choice(len(imgs), 2, replace=False)
+        
+        idx1_norm, idx2_norm = min(idx1, idx2), max(idx1, idx2)
+        pair_key = (identity, idx1_norm, idx2_norm)
+        
+        if enforce_unique and pair_key in used_pos:
+            continue
+            
+        used_pos.add(pair_key)
         pairs.append({
             'left_path': imgs[idx1],
             'right_path': imgs[idx2],
@@ -54,12 +66,22 @@ def generate_pairs_for_split(images_dict, num_pairs, split_name):
         
     # Generate negative pairs
     n_neg = num_pairs - len(pairs)
-    for _ in range(n_neg):
+    attempts = 0
+    while len(pairs) < num_pairs and attempts < n_neg * 10:
+        attempts += 1
         if len(identities) < 2:
             break
         id1, id2 = np.random.choice(identities, 2, replace=False)
         img1 = np.random.choice(images_dict[id1])
         img2 = np.random.choice(images_dict[id2])
+        
+        id1_norm, id2_norm, i1, i2 = (id1, id2, img1, img2) if id1 < id2 else (id2, id1, img2, img1)
+        pair_key = (id1_norm, i1, id2_norm, i2)
+        
+        if enforce_unique and pair_key in used_neg:
+            continue
+            
+        used_neg.add(pair_key)
         pairs.append({
             'left_path': img1,
             'right_path': img2,
@@ -96,7 +118,8 @@ def main():
             print(f"Warning: No images found for split {split_name} in {split_dir}")
             continue
             
-        pairs = generate_pairs_for_split(images_dict, num_pairs, split_name)
+        enforce_unique = config.get('enforce_unique', False)
+        pairs = generate_pairs_for_split(images_dict, num_pairs, split_name, enforce_unique=enforce_unique)
         
         output_file = os.path.join(output_dir, f"{split_name}.csv")
         with open(output_file, 'w', newline='') as f:

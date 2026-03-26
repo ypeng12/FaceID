@@ -1,59 +1,60 @@
-Face Verification Foundations
+Face Verification Engine - Milestone 2
 
 ## Project Overview
-This milestone establishes the reproducible foundations for the Face Verification system. The goal is to build a deterministic pipeline that ingests the LFW dataset, creates train/val/test splits, generates verification pairs, and implements fast, vectorized similarity metrics for embeddings.
+This repository operates a Face Verification evaluation pipeline powered by LFW. Milestone 2 replaces the static testings of Milestone 1 with a full machine-learning evaluation loop system. Using MobileNetV2 embedding extractors, the pipeline dynamically measures threshold tradeoff performance over different splits via a JSON tracking engine.
+
+### Data-Centric Improvement
+We observed that random pair extraction across uniform identities led to identical pairs being redundantly chosen for rare faces (e.g., identities with 2 total images). A deterministic tracking policy `enforce_unique` ensures positive and negative pairs are absolutely non-duplicated across tests, driving lower redundancy evaluations.
 
 ## Repository Layout
-- `src/`: Core Python modules (e.g., similarity metrics).
-- `scripts/`: Command-line entrypoints for dataset ingestion, pair generation, and benchmarking.
-- `configs/`: YAML configurations controlling dataset policies and seed settings.
-- `tests/`: Unit tests and determinism checks.
-- `outputs/`: Generated artifacts (manifest, pairs CSV files, benchmark results). **(Not committed)**
-- `data/`: Downloaded datasets cache. **(Not committed)**
+- `src/`: Core Python modules (`embedding.py`, `evaluation.py`, `similarity.py`, `tracking.py`).
+- `scripts/`: Entrypoints for evaluation (`run_evaluation.py`) and dataset processing.
+- `configs/`: YAML configurations tracking sweeps, data sources, and paired thresholds.
+- `tests/`: End-to-end integration and computation unit tests (`test_evaluation.py`).
+- `outputs/`: Metrics logs (`runs.json`) and processed datasets (Not Tracked).
+- `reports/`: `Milestone2_Report.md` and visualizations showcasing confusion data and ROC sweeps.
 
-## How to run (Reproducibility)
-Execute the following copy-paste commands from the repository root to reproduce the milestone from a fresh clone:
+## How to run (Milestone 2 Reproducibility)
 
 1. **Environment Setup**
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
    pip install -r requirements.txt
    ```
 
-2. **Data Ingestion**
-   This script loads the LFW dataset, creates deterministic splits based on identities, and saves images to `data/lfw`.
+2. **Ingest LFW and Generate Baseline Pairs**
    ```bash
    python scripts/ingest_lfw.py --config configs/data_config.yaml
-   ```
-
-3. **Pair Generation**
-   This script reads the available splits and deterministically generating matching and non-matching face image pairs.
-   ```bash
    python scripts/make_pairs.py --config configs/pairs_config.yaml
    ```
 
-4. **Benchmark Similarity Module**
-   This script runs a python loop versus numpy vectorized benchmark for distance metrics and saves the output to `outputs/bench/results.txt`.
+3. **Baseline Eval Pipeline (Runs 1-3)**
+   Sweep validation pairs for max F1 threshold, and apply it to standard evaluations:
    ```bash
-   python scripts/benchmark.py
+   python scripts/run_evaluation.py --config configs/eval_config.yaml
+   python scripts/run_evaluation.py --config configs/eval_val_run2.yaml
+   python scripts/run_evaluation.py --config configs/eval_test_run3.yaml
    ```
 
-## Outputs
-- **Manifest File**: `outputs/manifest.yaml` - details the seed, split policy, and image counts per split.
-- **Pair Files**: `outputs/pairs/train.csv`, `val.csv`, `test.csv` - containing paths to the paired image samples.
-- **Benchmark Results**: `outputs/bench/results.txt` - comparison of loop versus vectorized logic.
+4. **Data-Centric Data Refactoring**
+   Extract the unique pairs ensuring zero pairwise redundancy:
+   ```bash
+   python scripts/make_pairs.py --config configs/pairs_config_v2.yaml
+   ```
 
-## Determinism
-The entire pipeline relies on sorting identities alphabetically to ensure a repeatable ordering. A fixed seed (`42`) is set within `data_config.yaml` and `pairs_config.yaml` which handles the shuffling of identities and the negative/positive sampling of pairs. The manifest guarantees verifiability.
+5. **Post-Change Pipeline (Runs 4-5)**
+   ```bash
+   python scripts/run_evaluation.py --config configs/eval_val_sweep_v2.yaml
+   python scripts/run_evaluation.py --config configs/eval_test_eval_v2.yaml
+   ```
+
+6. **Generate Report**
+   *After tracking metrics have been fully rendered to `outputs/eval/`*:
+   ```bash
+   python scripts/generate_report.py
+   ```
 
 ## Tests
-Run unit tests and determinism checks:
+Validate the complete setup by executing local integration and unit checks:
 ```bash
-python -m pytest tests/ -v
-```
-Or without pytest:
-```bash
-python tests/test_similarity.py
-python tests/test_determinism.py
+python -m pytest tests/test_evaluation.py -v
 ```

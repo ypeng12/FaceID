@@ -1,0 +1,9 @@
+run_name: "Run2-Baseline-Val-Eval"
+data_version: "v1.0-baseline"
+split: "val"
+pairs_file: "outputs/pairs/val.csv"
+is_sweep: false
+threshold: 0.61 
+score_is_distance: false
+note: "Baseline evaluation on validation split with chosen threshold"
+output_dir: "outputs/eval"

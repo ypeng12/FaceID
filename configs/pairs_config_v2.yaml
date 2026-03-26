@@ -1,0 +1,9 @@
+seed: 42
+pair_policy: "For each split, generate unique positive and negative pairs to prevent leakage. Pos pairs from ids with >=2 images."
+enforce_unique: true
+train_pairs: 2000
+val_pairs: 500
+test_pairs: 500
+data_dir: "data/lfw"
+manifest_path: "outputs/manifest_v2.yaml"
+output_dir: "outputs/pairs_v2"
