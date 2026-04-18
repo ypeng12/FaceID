@@ -51,3 +51,18 @@ def get_confusion_matrix(scores, labels, threshold, score_is_distance=False):
         "tn": m["tn"],
         "fn": m["fn"]
     }
+
+def compute_confidence(score, threshold, k=10, score_is_distance=False):
+    """
+    Computes a calibrated confidence score in [0.5, 1.0] for the decision.
+    Uses a sigmoid transformation centered at the threshold.
+    """
+    if score_is_distance:
+        val = threshold - score
+    else:
+        val = score - threshold
+        
+    # prob in [0, 1], 0.5 at val=0 (score=threshold)
+    prob = 1.0 / (1.0 + np.exp(-k * val))
+    confidence = prob if prob >= 0.5 else 1.0 - prob
+    return float(confidence)

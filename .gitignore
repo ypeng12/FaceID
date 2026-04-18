@@ -27,3 +27,8 @@ venv.bak/
 *.swp
 *.swo
 .DS_Store
+
+# Milestone 3 additions
+scratch/
+*.pdf
+.deepface/

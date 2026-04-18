@@ -3,3 +3,7 @@ tensorflow
 tensorflow-datasets
 pyyaml
 Pillow
+deepface
+pytest
+pandas
+tf-keras

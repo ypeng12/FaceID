@@ -1,0 +1,9 @@
+run_name: "Run6-QuickCalibration-MS3"
+data_version: "v2.0-unique-pairs"
+split: "val"
+pairs_file: "outputs/pairs_v2/val_subset.csv"
+is_sweep: true
+threshold: 0.5
+score_is_distance: false
+note: "Quick recalibration on 100 pairs for Milestone 3"
+output_dir: "outputs/eval"

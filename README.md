@@ -1,60 +1,62 @@
-Face Verification Engine - Milestone 2
+Face Verification Engine - Milestone 3
 
 ## Project Overview
-This repository operates a Face Verification evaluation pipeline powered by LFW. Milestone 2 replaces the static testings of Milestone 1 with a full machine-learning evaluation loop system. Using MobileNetV2 embedding extractors, the pipeline dynamically measures threshold tradeoff performance over different splits via a JSON tracking engine.
+This repository operates a Face Verification evaluation pipeline powered by LFW. Milestone 3 transforms the prototype into a **deployable inference system**. We upgraded the representation from a weak baseline to **FaceNet (InceptionResNetV1)** embeddings, implemented a clean **Inference CLI**, added **calibrated confidence** metrics, and packaged the system via **Docker**.
 
-### Data-Centric Improvement
-We observed that random pair extraction across uniform identities led to identical pairs being redundantly chosen for rare faces (e.g., identities with 2 total images). A deterministic tracking policy `enforce_unique` ensures positive and negative pairs are absolutely non-duplicated across tests, driving lower redundancy evaluations.
+## Milestone 3 Features
+- **Embedding-based Inference**: Uses `DeepFace` (Facenet) for high-quality facial representations.
+- **Inference CLI**: Clean user interface for single or batch pair verification.
+- **Calibrated Confidence**: Maps similarity scores to a [0.5, 1.0] range using a sigmoid transformation relative to the operating threshold.
+- **Runtime Characterization**: Load-test script to measure throughput and p95 latency.
+- **Dockerized Deployment**: Reproducible environment for system evaluation and inference.
+
+## How to Run (Milestone 3)
+
+### 1. Local Environment Setup
+```bash
+pip install -r requirements.txt
+pip install tf-keras  # Required for DeepFace with TensorFlow 2.21+
+```
+
+### 2. Inference CLI
+Run verification on a single pair:
+```bash
+python scripts/inference.py --img1 path/to/img1.jpg --img2 path/to/img2.jpg
+```
+
+Run batch inference from a CSV:
+```bash
+python scripts/inference.py --batch outputs/pairs_v2/val_subset.csv
+```
+
+### 3. Load Testing
+Simulate concurrent requests and report throughput/latency:
+```bash
+python scripts/load_test.py --requests 20 --concurrency 4
+```
+
+### 4. Docker Deployment
+Build the image:
+```bash
+docker build -t faceid-m3 .
+```
+
+Run inference inside the container:
+```bash
+docker run --rm -v ${PWD}/data:/app/data faceid-m3 --img1 data/lfw/test/Aaron_Patterson/Aaron_Patterson_0000.jpg --img2 data/lfw/test/Aaron_Patterson/Aaron_Patterson_0000.jpg
+```
 
 ## Repository Layout
-- `src/`: Core Python modules (`embedding.py`, `evaluation.py`, `similarity.py`, `tracking.py`).
-- `scripts/`: Entrypoints for evaluation (`run_evaluation.py`) and dataset processing.
-- `configs/`: YAML configurations tracking sweeps, data sources, and paired thresholds.
-- `tests/`: End-to-end integration and computation unit tests (`test_evaluation.py`).
-- `outputs/`: Metrics logs (`runs.json`) and processed datasets (Not Tracked).
-- `reports/`: `Milestone2_Report.md` and visualizations showcasing confusion data and ROC sweeps.
+- `src/`: Core Python modules (Upgraded `embedding.py` to use FaceNet).
+- `scripts/`: Added `inference.py` and `load_test.py`.
+- `Dockerfile`: Containerization setup.
+- `reports/`: `Milestone3_Walkthrough.md`.
 
-## How to run (Milestone 2 Reproducibility)
-
-1. **Environment Setup**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Ingest LFW and Generate Baseline Pairs**
-   ```bash
-   python scripts/ingest_lfw.py --config configs/data_config.yaml
-   python scripts/make_pairs.py --config configs/pairs_config.yaml
-   ```
-
-3. **Baseline Eval Pipeline (Runs 1-3)**
-   Sweep validation pairs for max F1 threshold, and apply it to standard evaluations:
-   ```bash
-   python scripts/run_evaluation.py --config configs/eval_config.yaml
-   python scripts/run_evaluation.py --config configs/eval_val_run2.yaml
-   python scripts/run_evaluation.py --config configs/eval_test_run3.yaml
-   ```
-
-4. **Data-Centric Data Refactoring**
-   Extract the unique pairs ensuring zero pairwise redundancy:
-   ```bash
-   python scripts/make_pairs.py --config configs/pairs_config_v2.yaml
-   ```
-
-5. **Post-Change Pipeline (Runs 4-5)**
-   ```bash
-   python scripts/run_evaluation.py --config configs/eval_val_sweep_v2.yaml
-   python scripts/run_evaluation.py --config configs/eval_test_eval_v2.yaml
-   ```
-
-6. **Generate Report**
-   *After tracking metrics have been fully rendered to `outputs/eval/`*:
-   ```bash
-   python scripts/generate_report.py
-   ```
+## Milestone 2 Reproducibility
+(Previous instructions remain valid for evaluating the Milestone 2 backbone).
 
 ## Tests
-Validate the complete setup by executing local integration and unit checks:
+Execute checks for both evaluation and inference paths:
 ```bash
-python -m pytest tests/test_evaluation.py -v
+python -m pytest tests/
 ```

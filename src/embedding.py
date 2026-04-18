@@ -1,38 +1,38 @@
-import tensorflow as tf
 import numpy as np
-from PIL import Image
+from deepface import DeepFace
+import os
 
 class FaceEmbedder:
-    def __init__(self):
-        # We use MobileNetV2 without top layer, pooling="avg" gives (None, 1280) vectors
-        # Pretrained on ImageNet. A lightweight model to extract features.
-        self.model = tf.keras.applications.MobileNetV2(
-            input_shape=(224, 224, 3), 
-            include_top=False, 
-            weights='imagenet', 
-            pooling='avg'
-        )
+    def __init__(self, model_name="Facenet"):
+        self.model_name = model_name
+        # Trigger a dummy call to download/load the model if needed
+        print(f"Initializing FaceEmbedder with model: {self.model_name}")
+        # Note: DeepFace downloads models on first use.
 
     def compute_embedding(self, image_path: str) -> np.ndarray:
-        img = Image.open(image_path).convert('RGB')
-        img = img.resize((224, 224))
-        x = np.array(img, dtype=np.float32)
-        x = tf.keras.applications.mobilenet_v2.preprocess_input(x)
-        x = np.expand_dims(x, axis=0)
-        emb = self.model.predict(x, verbose=0)
-        return emb[0]
+        if not os.path.exists(image_path):
+            raise FileNotFoundError(f"Image not found: {image_path}")
+            
+        # DeepFace.represent returns a list (for multiple faces)
+        # We assume one face per image for LFW
+        objs = DeepFace.represent(
+            img_path=image_path, 
+            model_name=self.model_name,
+            enforce_detection=False, # LFW is mostly aligned, but we can set True if safe
+            detector_backend="opencv", # fastest, "mtcnn" is more accurate
+            align=True
+        )
+        if not objs:
+            return np.zeros(128) # Generic fallback or handle error
+            
+        emb = np.array(objs[0]["embedding"], dtype=np.float32)
+        return emb
 
-    def batch_compute_embeddings(self, image_paths: list, batch_size: int = 32) -> np.ndarray:
+    def batch_compute_embeddings(self, image_paths: list, batch_size: int = 16) -> np.ndarray:
         embeddings = []
-        for i in range(0, len(image_paths), batch_size):
-            batch_paths = image_paths[i:i+batch_size]
-            batch_imgs = []
-            for p in batch_paths:
-                img = Image.open(p).convert('RGB').resize((224, 224))
-                x = np.array(img, dtype=np.float32)
-                batch_imgs.append(x)
-            batch_x = np.stack(batch_imgs)
-            batch_x = tf.keras.applications.mobilenet_v2.preprocess_input(batch_x)
-            emb = self.model.predict(batch_x, verbose=0)
+        # DeepFace doesn't have a native "batch represent" for list of paths that is significantly faster
+        # than sequential calls, but we can iterate.
+        for path in image_paths:
+            emb = self.compute_embedding(path)
             embeddings.append(emb)
         return np.vstack(embeddings)
