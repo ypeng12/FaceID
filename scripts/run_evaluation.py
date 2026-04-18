@@ -56,7 +56,7 @@ def main():
     for p in pairs:
         unique_paths.add(p['left_path'])
         unique_paths.add(p['right_path'])
-    unique_paths = list(unique_paths)
+    unique_paths = sorted(unique_paths)
     
     for p in unique_paths:
         if not os.path.exists(p):
@@ -101,6 +101,23 @@ def main():
         with open(sweep_file, 'w') as f:
              json.dump(sweep_data, f, indent=2)
         print(f"Sweep data saved to {sweep_file}")
+
+        selected_threshold_file = os.path.join(
+            config["output_dir"],
+            f"selected_threshold_{config['run_name']}.json",
+        )
+        with open(selected_threshold_file, 'w') as f:
+            json.dump(
+                {
+                    "run_name": config['run_name'],
+                    "best_threshold": float(best_th),
+                    "best_f1": float(best_f1),
+                    "score_is_distance": bool(config.get("score_is_distance", False)),
+                },
+                f,
+                indent=2,
+            )
+        print(f"Selected threshold saved to {selected_threshold_file}")
         
         tracker.log_run(config['run_name'], args.config, config['data_version'], True, float(best_th), metrics, config['note'])
         
