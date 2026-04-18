@@ -1,0 +1,5 @@
+model_name: "Facenet"
+threshold: 0.40
+confidence_k: 10.0
+score_is_distance: false
+note: "Milestone 3 default CLI settings. Update threshold after recalibration sweep."
