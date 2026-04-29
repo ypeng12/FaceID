@@ -1,5 +1,8 @@
 # FaceID Verification Engine - Final Release (Milestone 4)
 
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](YOUR_HF_SPACE_URL_HERE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Project Overview
 This repository contains a professional Face Verification system. Milestone 4 represents the final "Release" version, featuring a FaceNet-based inference pipeline, comprehensive hardware profiling, and a professional System Card.
 
@@ -48,3 +51,6 @@ This project follows strict reproducibility standards. To verify the system from
 
 ## Versioning
 - **Current Version**: `v1.0-final` (Tagged in Git)
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
