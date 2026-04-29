@@ -132,12 +132,12 @@ def main():
             st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
             st.subheader("Subject A")
             if s_img1:
-                st.image(s_img1, use_container_width=True)
+                st.image(s_img1, width='stretch')
                 file1 = s_img1
             else:
                 file1_up = st.file_uploader("Upload image 1", type=['jpg', 'jpeg', 'png'], key="app_img1")
                 if file1_up: 
-                    st.image(file1_up, use_container_width=True)
+                    st.image(file1_up, width='stretch')
                     file1 = save_uploaded_file(file1_up)
                 else: file1 = None
             st.markdown("</div>", unsafe_allow_html=True)
@@ -146,12 +146,12 @@ def main():
             st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
             st.subheader("Subject B")
             if s_img2:
-                st.image(s_img2, use_container_width=True)
+                st.image(s_img2, width='stretch')
                 file2 = s_img2
             else:
                 file2_up = st.file_uploader("Upload image 2", type=['jpg', 'jpeg', 'png'], key="app_img2")
                 if file2_up: 
-                    st.image(file2_up, use_container_width=True)
+                    st.image(file2_up, width='stretch')
                     file2 = save_uploaded_file(file2_up)
                 else: file2 = None
             st.markdown("</div>", unsafe_allow_html=True)
