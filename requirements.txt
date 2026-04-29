@@ -7,3 +7,5 @@ deepface
 pytest
 pandas
 tf-keras
+streamlit
+streamlit-option-menu

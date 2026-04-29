@@ -1,0 +1,9 @@
+run_name: "Run7-Milestone4-Final"
+data_version: "v2.0-unique-pairs"
+split: "val"
+pairs_file: "outputs/pairs_v2/val.csv"
+is_sweep: false
+threshold: 0.35
+score_is_distance: false
+note: "Final Milestone 4 configuration using optimal FaceNet threshold"
+output_dir: "outputs/eval"

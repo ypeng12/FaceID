@@ -11,7 +11,7 @@ from src.embedding import FaceEmbedder
 from src.similarity import numpy_vectorized_cosine
 from src.evaluation import compute_confidence
 
-def run_inference(img1_path, img2_path, threshold=0.40):
+def run_inference(img1_path, img2_path, threshold=0.35, embedder=None):
     """
     Run the full inference pipeline for one pair of images.
     Returns a dictionary with result details.
@@ -19,9 +19,10 @@ def run_inference(img1_path, img2_path, threshold=0.40):
     start_total = time.time()
     
     # 1. Preprocessing & Embedding Extraction
-    # FaceEmbedder internally handles alignment and resizing via DeepFace
     start_emb = time.time()
-    embedder = FaceEmbedder(model_name="Facenet")
+    if embedder is None:
+        embedder = FaceEmbedder(model_name="Facenet")
+        
     emb1 = embedder.compute_embedding(img1_path)
     emb2 = embedder.compute_embedding(img2_path)
     latency_emb = time.time() - start_emb
@@ -58,7 +59,7 @@ def main():
     parser = argparse.ArgumentParser(description="FaceID Inference CLI (Milestone 3)")
     parser.add_argument("--img1", type=str, help="Path to first face image")
     parser.add_argument("--img2", type=str, help="Path to second face image")
-    parser.add_argument("--threshold", type=float, default=0.40, help="Similarity threshold (default: 0.40)")
+    parser.add_argument("--threshold", type=float, default=0.35, help="Similarity threshold (default: 0.35)")
     parser.add_argument("--batch", type=str, help="Path to batch CSV file (with left_path, right_path)")
     
     args = parser.parse_args()

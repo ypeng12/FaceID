@@ -1,62 +1,47 @@
-Face Verification Engine - Milestone 3
+# FaceID Verification Engine - Final Release (Milestone 4)
 
 ## Project Overview
-This repository operates a Face Verification evaluation pipeline powered by LFW. Milestone 3 transforms the prototype into a **deployable inference system**. We upgraded the representation from a weak baseline to **FaceNet (InceptionResNetV1)** embeddings, implemented a clean **Inference CLI**, added **calibrated confidence** metrics, and packaged the system via **Docker**.
+This repository contains a professional Face Verification system. Milestone 4 represents the final "Release" version, featuring a FaceNet-based inference pipeline, comprehensive hardware profiling, and a professional System Card.
 
-## Milestone 3 Features
-- **Embedding-based Inference**: Uses `DeepFace` (Facenet) for high-quality facial representations.
-- **Inference CLI**: Clean user interface for single or batch pair verification.
-- **Calibrated Confidence**: Maps similarity scores to a [0.5, 1.0] range using a sigmoid transformation relative to the operating threshold.
-- **Runtime Characterization**: Load-test script to measure throughput and p95 latency.
-- **Dockerized Deployment**: Reproducible environment for system evaluation and inference.
+## 🚀 Quick Start (Final Release)
 
-## How to Run (Milestone 3)
-
-### 1. Local Environment Setup
+### 1. Setup
 ```bash
 pip install -r requirements.txt
-pip install tf-keras  # Required for DeepFace with TensorFlow 2.21+
+pip install tf-keras
 ```
 
 ### 2. Inference CLI
-Run verification on a single pair:
+Run verification on any two images using the final calibrated threshold (0.35):
 ```bash
 python scripts/inference.py --img1 path/to/img1.jpg --img2 path/to/img2.jpg
 ```
 
-Run batch inference from a CSV:
+### 3. Interactive Web App
 ```bash
-python scripts/inference.py --batch outputs/pairs_v2/val_subset.csv
+streamlit run scripts/app.py
 ```
 
-### 3. Load Testing
-Simulate concurrent requests and report throughput/latency:
-```bash
-python scripts/load_test.py --requests 20 --concurrency 4
-```
+## 📊 Final Documentation (Milestone 4)
+- **[System Card](reports/System_Card.md)**: Detailed overview of model design, intended use, and fairness.
+- **[Profiling Report](reports/Profiling_Report.md)**: Breakdown of CPU latency and batch-size sensitivity.
+- **[Reproducibility Checklist](reports/Reproducibility_Checklist.md)**: Step-by-step guide to reproduce all project results.
 
-### 4. Docker Deployment
-Build the image:
-```bash
-docker build -t faceid-m3 .
-```
-
-Run inference inside the container:
-```bash
-docker run --rm -v ${PWD}/data:/app/data faceid-m3 --img1 data/lfw/test/Aaron_Patterson/Aaron_Patterson_0000.jpg --img2 data/lfw/test/Aaron_Patterson/Aaron_Patterson_0000.jpg
-```
+## Key Features
+- **State-of-the-Art Representations**: Uses FaceNet (InceptionResNetV1) for robust face verification.
+- **Calibrated Confidence**: Similarity scores are mapped to a human-readable confidence interval [0.5, 1.0].
+- **Production Ready**: Fully containerized via Docker with optimized CPU performance.
+- **Hardware Aware**: Detailed profiling provided for deployment planning.
 
 ## Repository Layout
-- `src/`: Core Python modules (Upgraded `embedding.py` to use FaceNet).
-- `scripts/`: Added `inference.py` and `load_test.py`.
-- `Dockerfile`: Containerization setup.
-- `reports/`: `Milestone3_Walkthrough.md`.
+- `configs/`: Final release configuration (`eval_ms4_final.yaml`).
+- `reports/`: System Card, Profiling Report, and Checklists.
+- `scripts/`: Final inference, profiling, and evaluation entry points.
+- `src/`: Core logic for embeddings, similarity, and evaluation.
+- `Dockerfile`: Containerization setup for final release.
 
-## Milestone 2 Reproducibility
-(Previous instructions remain valid for evaluating the Milestone 2 backbone).
+## Reproducibility
+This project follows strict reproducibility standards. To verify the system from a fresh clone, please refer to the [Reproducibility Checklist](reports/Reproducibility_Checklist.md).
 
-## Tests
-Execute checks for both evaluation and inference paths:
-```bash
-python -m pytest tests/
-```
+## Versioning
+- **Current Version**: `v1.0-final` (Tagged in Git)
