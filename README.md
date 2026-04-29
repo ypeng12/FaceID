@@ -1,3 +1,14 @@
+---
+title: FaceID Verification Engine
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
+sdk: streamlit
+app_file: scripts/app.py
+pinned: false
+license: mit
+---
+
 # FaceID Verification Engine - Final Release (Milestone 4)
 
 [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](YOUR_HF_SPACE_URL_HERE)
