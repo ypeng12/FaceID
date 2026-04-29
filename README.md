@@ -7,6 +7,9 @@ This repository contains a professional Face Verification system. Milestone 4 re
 
 ### 1. Setup
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 pip install tf-keras
 ```
