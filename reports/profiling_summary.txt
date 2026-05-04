@@ -1,16 +1,17 @@
 # FaceID Hardware-Aware Profiling Summary
-Date: 2026-04-29 14:35:46
+Date: 2026-05-04 12:18:15
 
 ## Latency Breakdown (ms)
 | Stage | Mean | p95 |
 | :--- | :--- | :--- |
-| Embedding Generation | 544.60 | 584.50 |
-| Similarity Scoring | 0.13 | 0.17 |
+| Preprocessing (Detect/Align) | 170.54 | 227.79 |
+| Embedding Generation | 237.70 | 267.43 |
+| Similarity Scoring | 0.17 | 0.45 |
 
-## Batch Sensitivity
+## Batch Sensitivity (End-to-End)
 | Batch Size | Total Latency (ms) | Latency/Image (ms) | Throughput (FPS) |
 | :--- | :--- | :--- | :--- |
-| 1 | 470.91 | 470.91 | 2.12 |
-| 4 | 1849.21 | 462.30 | 2.16 |
-| 8 | 3504.98 | 438.12 | 2.28 |
-| 16 | 7270.00 | 454.37 | 2.20 |
+| 1 | 235.87 | 235.87 | 4.24 |
+| 4 | 929.08 | 232.27 | 4.31 |
+| 8 | 2016.02 | 252.00 | 3.97 |
+| 16 | 3904.67 | 244.04 | 4.10 |

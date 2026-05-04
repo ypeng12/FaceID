@@ -33,7 +33,12 @@ Evaluated on the LFW (Labeled Faces in the Wild) validation subset.
 - **Similarity in Identity**: High similarity scores may occur between look-alikes or biological relatives (False Positives).
 
 ## 6. Fairness and Risks
-- **Demographic Bias**: Like most face recognition systems, performance may vary across different ethnicities and age groups. While evaluated on LFW, users should perform their own local fairness audits if deploying in diverse populations.
+- **Demographic Bias**: The system was primarily evaluated on the **LFW (Labeled Faces in the Wild)** dataset. LFW is known to have a demographic skew:
+    - **Ethnicity**: Predominantly Caucasian individuals (~70%+).
+    - **Gender**: Significant bias towards male subjects (~75%).
+    - **Age**: Most subjects are between 20-50 years old.
+- **Risk Mitigation**: Performance may be significantly lower for underrepresented groups (e.g., non-white ethnicities, children, or elderly individuals). Users should perform their own local fairness audits with balanced datasets before deployment in diverse environments.
+- **Misuse Concerns**: The system should not be used for mass surveillance or without the explicit consent of the subjects, except where legally permitted.
 - **Privacy**: The system processes sensitive biometric data. Developers must ensure compliance with data protection regulations (e.g., GDPR, BIPA).
 
 ## 7. Operational Constraints

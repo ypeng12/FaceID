@@ -190,8 +190,8 @@ def main():
         with l_col1:
             st.markdown("#### Latency Breakdown")
             latency_data = pd.DataFrame({
-                "Stage": ["Embedding", "Similarity"],
-                "Mean (ms)": [464.76, 0.15]
+                "Stage": ["Preprocessing", "Embedding", "Similarity"],
+                "Mean (ms)": [170.54, 237.70, 0.17]
             })
             st.bar_chart(latency_data.set_index("Stage"))
         
@@ -199,7 +199,7 @@ def main():
             st.markdown("#### Throughput by Batch Size")
             throughput_data = pd.DataFrame({
                 "Batch Size": [1, 4, 8, 16],
-                "FPS": [2.10, 2.03, 2.04, 2.20]
+                "FPS": [4.24, 4.31, 3.97, 4.10]
             })
             st.line_chart(throughput_data.set_index("Batch Size"))
             

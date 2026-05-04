@@ -3,6 +3,7 @@ import time
 import os
 import sys
 import numpy as np
+from deepface import DeepFace
 
 # Add workspace to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -35,21 +36,36 @@ def run_profiling(iterations=5, batch_sizes=[1, 4, 8, 16]):
     
     # 2. Latency Breakdown
     print(f"Measuring latency over {iterations} iterations...")
+    pre_latencies = []
     emb_latencies = []
     sim_latencies = []
     
     for _ in range(iterations):
-        # Embedding Latency
+        # Preprocessing Latency (Detection & Alignment)
         t0 = time.perf_counter()
-        emb1 = embedder.compute_embedding(sample_img)
-        emb2 = embedder.compute_embedding(sample_img)
-        emb_latencies.append((time.perf_counter() - t0) * 1000 / 2) # Latency per image
+        # extract_faces returns a list of dictionaries
+        faces = DeepFace.extract_faces(img_path=sample_img, detector_backend="opencv", enforce_detection=False, align=True)
+        pre_latencies.append((time.perf_counter() - t0) * 1000)
+        
+        # We need the face array for representation
+        face_img = faces[0]["face"]
+        
+        # Embedding Latency (Model Inference)
+        t0 = time.perf_counter()
+        # Passing numpy array and setting enforce_detection=False skips preprocessing
+        objs = DeepFace.represent(img_path=face_img, model_name=embedder.model_name, enforce_detection=False)
+        emb_latencies.append((time.perf_counter() - t0) * 1000)
+        
+        emb1 = np.array(objs[0]["embedding"], dtype=np.float32)
+        emb2 = emb1.copy() # Just for scoring measurement
         
         # Similarity Latency
         t0 = time.perf_counter()
         _ = numpy_vectorized_cosine(emb1.reshape(1, -1), emb2.reshape(1, -1))
         sim_latencies.append((time.perf_counter() - t0) * 1000)
 
+    mean_pre = np.mean(pre_latencies)
+    p95_pre = np.percentile(pre_latencies, 95)
     mean_emb = np.mean(emb_latencies)
     p95_emb = np.percentile(emb_latencies, 95)
     mean_sim = np.mean(sim_latencies)
@@ -59,7 +75,7 @@ def run_profiling(iterations=5, batch_sizes=[1, 4, 8, 16]):
     print("Measuring batch-size sensitivity...")
     batch_results = []
     for bs in batch_sizes:
-        # Create a list of image paths (just repeat the same for profiling)
+        # For batch sensitivity, we measure end-to-end (pre + emb) per image
         paths = [sample_img] * bs
         t0 = time.perf_counter()
         _ = embedder.batch_compute_embeddings(paths, batch_size=bs)
@@ -80,10 +96,11 @@ def run_profiling(iterations=5, batch_sizes=[1, 4, 8, 16]):
     report.append("\n## Latency Breakdown (ms)")
     report.append("| Stage | Mean | p95 |")
     report.append("| :--- | :--- | :--- |")
+    report.append(f"| Preprocessing (Detect/Align) | {mean_pre:.2f} | {p95_pre:.2f} |")
     report.append(f"| Embedding Generation | {mean_emb:.2f} | {p95_emb:.2f} |")
     report.append(f"| Similarity Scoring | {mean_sim:.2f} | {p95_sim:.2f} |")
     
-    report.append("\n## Batch Sensitivity")
+    report.append("\n## Batch Sensitivity (End-to-End)")
     report.append("| Batch Size | Total Latency (ms) | Latency/Image (ms) | Throughput (FPS) |")
     report.append("| :--- | :--- | :--- | :--- |")
     for r in batch_results:
