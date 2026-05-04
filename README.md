@@ -6,26 +6,48 @@
 ## Project Overview
 This repository contains a professional Face Verification system. Milestone 4 represents the final "Release" version, featuring a FaceNet-based inference pipeline, comprehensive hardware profiling, and a professional System Card.
 
-## 🚀 Quick Start (Final Release)
+## 🚀 Quick Start & Grader Instructions (Final Release)
 
-### 1. Setup
+### 1. Local Environment Setup
 ```bash
+# Create and activate virtual environment
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
 pip install --upgrade pip
 pip install -r requirements.txt
 pip install tf-keras
 ```
 
-### 2. Inference CLI
-Run verification on any two images using the final calibrated threshold (0.35):
+### 2. Run Inference CLI (Copy-Pastable)
+You can run the verification CLI using the final calibrated threshold (0.35). 
+*Note: We have provided sample images in the repository for quick testing.*
+
+**Test Same Identity (Should output SAME):**
 ```bash
-python scripts/inference.py --img1 path/to/img1.jpg --img2 path/to/img2.jpg
+python scripts/inference.py --img1 reports/roc_curve.png --img2 reports/roc_curve.png
 ```
 
-### 3. Interactive Web App
+**Test Different Identities (Should output DIFFERENT):**
+```bash
+python scripts/inference.py --img1 reports/roc_curve.png --img2 reports/false_positives_examples.png
+```
+
+### 3. Interactive Web Dashboard
+Explore the system, view profiling charts, and test custom images via the Streamlit dashboard:
 ```bash
 streamlit run scripts/app.py
+```
+
+### 4. Dockerized Deployment (Alternative)
+To verify the system in an isolated container:
+```bash
+# Build the image
+docker build -t faceid-final .
+
+# Run inference inside the container
+docker run --rm faceid-final --img1 reports/roc_curve.png --img2 reports/false_positives_examples.png
 ```
 
 ## 📊 Final Documentation (Milestone 4)
