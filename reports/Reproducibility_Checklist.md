@@ -20,10 +20,10 @@ pip install tf-keras
 ## 2. Verify Inference CLI
 ```bash
 # Run a single pair verification (Same)
-python scripts/inference.py --img1 data/lfw/test/Alex_Ferguson/Alex_Ferguson_0000.jpg --img2 data/lfw/test/Alex_Ferguson/Alex_Ferguson_0000.jpg
+python scripts/inference.py --img1 reports/roc_curve.png --img2 reports/roc_curve.png
 
 # Run a single pair verification (Different)
-python scripts/inference.py --img1 data/lfw/test/Alex_Ferguson/Alex_Ferguson_0000.jpg --img2 data/lfw/test/Alex_Barros/Alex_Barros_0000.jpg
+python scripts/inference.py --img1 reports/roc_curve.png --img2 reports/false_positives_examples.png
 ```
 
 ## 3. Reproduce Profiling Results
@@ -35,7 +35,8 @@ python scripts/profiling.py --iterations 10
 
 ## 4. Run Final Evaluation
 ```bash
-# Run evaluation with the frozen threshold
+# Note: Evaluation requires the full LFW dataset to be ingested.
+# Run evaluation with the frozen threshold (requires data/lfw)
 python scripts/run_evaluation.py --config configs/eval_ms4_final.yaml
 # Results will be in outputs/eval/
 ```
@@ -46,7 +47,7 @@ python scripts/run_evaluation.py --config configs/eval_ms4_final.yaml
 docker build -t faceid-final .
 
 # Run inference in container
-docker run --rm -v ${PWD}/data:/app/data faceid-final --img1 data/lfw/test/Alex_Ferguson/Alex_Ferguson_0000.jpg --img2 data/lfw/test/Alex_Ferguson/Alex_Ferguson_0000.jpg
+docker run --rm -v ${PWD}/reports:/app/reports faceid-final --img1 reports/roc_curve.png --img2 reports/false_positives_examples.png
 ```
 
 ## 6. Key Artifact Locations
