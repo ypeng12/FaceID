@@ -1,18 +1,19 @@
 ---
-title: FaceID Verification Engine
+title: FaceID - Real-Time Recognition & Verification Suite
 emoji: 🛡️
 colorFrom: blue
 colorTo: indigo
-sdk: streamlit
-app_file: scripts/app.py
+sdk: docker
+short_description: Real-time face recognition & verification engine demo
 pinned: false
 license: mit
 ---
 
-# FaceID Verification Engine - Final Release (Milestone 4)
+# FaceID Recognition Engine - Hugging Face Space Edition
 
-[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](YOUR_HF_SPACE_URL_HERE)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 ## Project Overview
 This repository contains a professional Face Verification system. Milestone 4 represents the final "Release" version, featuring a FaceNet-based inference pipeline, comprehensive hardware profiling, and a professional System Card.

@@ -1,6 +1,7 @@
 numpy==1.26.4
 tensorflow==2.15.1
 tensorflow-datasets==4.9.4
+protobuf>=3.20.3,<5.0.0
 pyyaml==6.0.2
 Pillow==10.4.0
 deepface==0.0.95
@@ -9,3 +10,4 @@ pandas==2.2.3
 tf-keras==2.15.1
 streamlit
 streamlit-option-menu
+opencv-python-headless

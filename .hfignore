@@ -1,0 +1,11 @@
+.venv/
+.git/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pdf
+data/
+outputs/
+scratch/
+.env
+.deepface/
