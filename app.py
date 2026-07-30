@@ -29,17 +29,15 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap');
     
     .stApp {
-        background: linear-gradient(135deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
-        color: #f8fafc;
+        background: #ffffff;
+        color: #0f172a;
     }
     
     .main-title {
         font-family: 'Orbitron', sans-serif;
         font-size: 2.8rem;
         font-weight: 700;
-        background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #1e293b;
         text-align: center;
         margin-bottom: 0.2rem;
     }
@@ -47,19 +45,18 @@ st.markdown("""
     .sub-title {
         font-family: 'Inter', sans-serif;
         text-align: center;
-        color: #94a3b8;
+        color: #475569;
         font-size: 1.1rem;
         margin-bottom: 2rem;
     }
     
     .glass-card {
-        background: rgba(30, 41, 59, 0.65);
-        backdrop-filter: blur(12px);
+        background: #ffffff;
         border-radius: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        border: 1px solid #e2e8f0;
         padding: 1.5rem;
         margin-bottom: 1.2rem;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
     }
     
     .status-badge {
